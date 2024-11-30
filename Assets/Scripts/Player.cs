@@ -1,5 +1,4 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -10,28 +9,26 @@ public class Player : MonoBehaviour
     public Movement movement { get; private set; }
     public Tilemap mistTilemap;
     public Tilemap targetTilemap;
+    private AudioSource sweepAudioSource;
+    private SpriteRenderer _renderer;
+    private Collider2D _collider;
 
-    public float clearMistCooldownTime = 3.0f;
+    public float clearMistCooldownTime = 1.5f;
     private bool canClearMist = true;
 
     private void Awake()
     {
-        this.movement = GetComponent<Movement>();
-    }
+        movement = GetComponent<Movement>();
+        sweepAudioSource = GetComponent<AudioSource>();
+        _renderer = GetComponent<SpriteRenderer>();
+        _collider = GetComponent<Collider2D>();
 
-    void Start()
-    {
-        if (mistTilemap == null || targetTilemap == null)
-        {
-            Debug.LogError("Tilemaps not assigned to player");
-        }
+        movement.isPlayer = true;
     }
 
     void FixedUpdate()
     {
     }
-
-    // public GameObject bulletPrefab;
 
     private void Update()
     {
@@ -43,22 +40,22 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
-            movement.SetDirection(Vector2.up);
+            movement.SetDirection(Vector2.up, false, false);
         }
 
         else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            movement.SetDirection(Vector2.left);
+            movement.SetDirection(Vector2.left, false, false);
         }
 
         else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
         {
-            movement.SetDirection(Vector2.down);
+            movement.SetDirection(Vector2.down, false, false);
         }
 
         else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
         {
-            movement.SetDirection(Vector2.right);
+            movement.SetDirection(Vector2.right, false, false);
         }
 
         else if (Input.GetKeyDown(KeyCode.Space))
@@ -78,11 +75,29 @@ public class Player : MonoBehaviour
         canClearMist = true;
     }
 
+    public void ResetState()
+    {
+        enabled = true;
+        _renderer.enabled = true;
+        _collider.enabled = true;
+        
+        movement.ResetState();
+        gameObject.SetActive(true);
+    }
+
+    public void Die()
+    {
+        enabled = false;
+        _renderer.enabled = false;
+        _collider.enabled = false;
+        movement.enabled = false;
+    }
+
     void SweepTargets() {
         if (mistTilemap == null || targetTilemap == null) return;
 
         Vector3Int playerCell = mistTilemap.WorldToCell(transform.position);
-        int radius = 2;
+        int radius = 3;
 
         for (int x = -radius; x <= radius; x++) {
             for (int y = -radius; y <= radius; y++) {
@@ -108,15 +123,26 @@ public class Player : MonoBehaviour
             }
         }
 
+        LevelManager.Instance.TrySpawnNewEnemy();
+
+        sweepAudioSource?.Play();
+
         Invoke(nameof(resetMistCleanCooldown), clearMistCooldownTime);
     }
 
-    // void ShootBullet()
-    // {
-    //     Debug.Log("Shoot bullet");
-    //     GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-    //     Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
-    //     bulletRb.linearVelocity = Vector2.right * 10f;
-    // }
+    private void OnDrawGizmos()
+    {
+        if (_collider != null)
+        {
+            // Get the collider bounds
+            Bounds bounds = _collider.bounds;
+            
+            // Set gizmo color
+            Gizmos.color = Color.yellow;
+            
+            // Draw wire cube representing the collider
+            Gizmos.DrawWireCube(bounds.center, bounds.size);
+        }
+    }
 
 }

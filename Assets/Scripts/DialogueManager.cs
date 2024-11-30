@@ -6,7 +6,28 @@ using UnityEngine.UI;
 
 public class Dialogue : MonoBehaviour
 {
-    public static Dialogue Instance { get; private set; }
+    public static Dialogue Instance {
+        get
+        {
+            if (_instance == null)
+            {
+                GameObject dPrefab = Resources.Load<GameObject>("DialogueManager");
+
+                if (dPrefab != null)
+                {
+                    _instance = Instantiate(dPrefab).GetComponent<Dialogue>();
+                    _instance.name = "DialogueManager";
+                    DontDestroyOnLoad(_instance);
+                } else
+                {
+                    Debug.LogError("DialogueManager prefab not found in Resources!");
+                }
+            }
+
+            return _instance;
+        }
+    }
+    private static Dialogue _instance;
 
     [SerializeField] private Image backPortrait;
     [SerializeField] private Image centerPortrait;
@@ -15,6 +36,8 @@ public class Dialogue : MonoBehaviour
     [SerializeField] private DialogueLine[] activeLines = new DialogueLine[0];
     public float textSpeed;
 
+    private Sprite _defaultAvatarSprite;
+    [SerializeField] private Sprite smileAvatarSprite;
     [SerializeField] private Image avatar;
 
     private int index;
@@ -25,17 +48,18 @@ public class Dialogue : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
+        if (_instance != null && _instance != this)
         {
-            Debug.Log("Create dialogue singleton");
-            Instance = this;
-            DontDestroyOnLoad(gameObject); // Check whether to delete it 
+            Debug.Log("Destroy duplicate Dialogue");
+            DestroyImmediate(gameObject);
+
+            return;
+             
         }
-        else
-        {
-            Debug.Log("Destroy dialogue singleton");
-            Destroy(gameObject);
-        }
+        
+        Debug.Log("Create dialogue singleton");
+        _instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     public void SetNextScene(string sceneName)
@@ -50,8 +74,12 @@ public class Dialogue : MonoBehaviour
             return;
         }
 
+        inProgress = false;
+        backPortrait.gameObject.SetActive(false);
+        centerPortrait.gameObject.SetActive(false);
         textComponent.text = string.Empty;
         nameComponent.text = string.Empty;
+        _defaultAvatarSprite = avatar.sprite;
     }
 
     void Update()
@@ -72,6 +100,8 @@ public class Dialogue : MonoBehaviour
 
     public void StartDialogue(DialogueLine[] lines)
     {
+        avatar?.gameObject.SetActive(false);
+        Debug.Log("StartDialogue");
         if (lines.Length > 0)
         {
             activeLines = lines;
@@ -94,14 +124,34 @@ public class Dialogue : MonoBehaviour
         nameComponent.text = currentLine.characterName == null ? string.Empty : currentLine.characterName;
         if (currentLine.characterImage != null)
         {
-            centerPortrait.sprite = currentLine.characterImage;
+            if (currentLine.useCenterPortrait) 
+            {
+                backPortrait.gameObject.SetActive(false);
+                centerPortrait.gameObject.SetActive(true);
+                centerPortrait.sprite = currentLine.characterImage;
+            }
+            else
+            {
+                backPortrait.gameObject.SetActive(true);
+                centerPortrait.gameObject.SetActive(false);
+                backPortrait.sprite = currentLine.characterImage;
+            }
+        }
+        else
+        {
+            centerPortrait.gameObject.SetActive(false);
+            backPortrait.gameObject.SetActive(false);
         }
 
-        avatar?.gameObject.SetActive(currentLine.characterName == "" ? false : true);
+        avatar?.gameObject.SetActive(currentLine.characterName == "");
+
+        if (currentLine.characterName == "" && avatar != null)
+        {
+            avatar.sprite = (currentLine.isSmile ? smileAvatarSprite : _defaultAvatarSprite);
+        }
 
         foreach (char c in currentLine.line.ToCharArray())
         {
-            Debug.Log(c);
             textComponent.text += c;
             yield return new WaitForSeconds(textSpeed);
         }

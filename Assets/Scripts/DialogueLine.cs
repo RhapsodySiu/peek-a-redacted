@@ -7,4 +7,6 @@ public struct DialogueLine {
     public Sprite characterImage;
 
     public bool useCenterPortrait;
+
+    public bool isSmile;
 }

@@ -443,22 +443,74 @@ MonoBehaviour:
     audioResource: {fileID: 8300000, guid: 73d26d0cdc3775448aaae9ff8099afd8, type: 3}
   - sceneName: Scenes/Level0
     audioResource: {fileID: 8300000, guid: 32d9e9966f47906498ad178b8e8f8585, type: 3}
+  - sceneName: Scenes/Dialogue1
+    audioResource: {fileID: 8300000, guid: 73d26d0cdc3775448aaae9ff8099afd8, type: 3}
+  - sceneName: Scenes/Level1
+    audioResource: {fileID: 8300000, guid: 3bff32d298c0d4e4890fbbd75639da97, type: 3}
+  - sceneName: Scenes/Credit
+    audioResource: {fileID: 8300000, guid: b8faf6b6ccc738443b62bb3e78ad3149, type: 3}
+  sceneLevelMappings:
+  - levelId: 0
+    nextScene: Scenes/Dialogue1
+  - levelId: 1
+    nextScene: Scenes/Credit
   sceneDialogueMappings:
   - sceneName: Scenes/Dialogue0
     dialogueLines:
     - line: Hallo wie lauft du?
       characterName: Nakako
       characterImage: {fileID: 21300000, guid: 20fe5fe6141d12e41a380d6885cc9f80, type: 3}
+      useCenterPortrait: 1
+      isSmile: 0
     - line: Aber ich habe keine Erfahrung
       characterName: 
       characterImage: {fileID: 21300000, guid: 2112ef5055e0a0843a0e9d3fa8965964, type: 3}
+      useCenterPortrait: 1
+      isSmile: 0
     - line: Es gibt Schmutterling im Magen
       characterName: Nakako
       characterImage: {fileID: 21300000, guid: 0b5991baeef7ac24dba13947fd071fb7, type: 3}
+      useCenterPortrait: 1
+      isSmile: 0
     - line: Vielleicht soll ich nachzudenken
       characterName: 
       characterImage: {fileID: 21300000, guid: 6d8d4d97015490442a653c5913ce50fb, type: 3}
+      useCenterPortrait: 1
+      isSmile: 1
+    - line: Was ist passiert?
+      characterName: Nakako
+      characterImage: {fileID: 21300000, guid: 20fe5fe6141d12e41a380d6885cc9f80, type: 3}
+      useCenterPortrait: 1
+      isSmile: 0
     nextScene: Scenes/Level0
+  - sceneName: Scenes/Dialogue1
+    dialogueLines:
+    - line: Hallo wie lauft du?
+      characterName: Shadow of Bellona
+      characterImage: {fileID: 21300000, guid: 10980f8e388ad584ab1f8b469df30333, type: 3}
+      useCenterPortrait: 0
+      isSmile: 0
+    - line: Aber ich habe keine Erfahrung
+      characterName: 
+      characterImage: {fileID: 21300000, guid: 10980f8e388ad584ab1f8b469df30333, type: 3}
+      useCenterPortrait: 0
+      isSmile: 0
+    - line: Es gibt Schmutterling im Magen
+      characterName: Shadow of Bellona
+      characterImage: {fileID: 21300000, guid: eac15c30fd1e1f443b53d8c8c2f3cd21, type: 3}
+      useCenterPortrait: 0
+      isSmile: 0
+    - line: Vielleicht soll ich nachzudenken
+      characterName: 
+      characterImage: {fileID: 21300000, guid: 10980f8e388ad584ab1f8b469df30333, type: 3}
+      useCenterPortrait: 0
+      isSmile: 1
+    - line: Was ist passiert?
+      characterName: Shadow of Bellona
+      characterImage: {fileID: 21300000, guid: 4156117b98a85174fb9ebfe5fe398a49, type: 3}
+      useCenterPortrait: 0
+      isSmile: 0
+    nextScene: Scenes/Level1
   menuScene: Scenes/Menu
 --- !u!1 &6955266330075544343
 GameObject:

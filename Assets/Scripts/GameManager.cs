@@ -15,6 +15,12 @@ public class SceneDialoguesMapping {
 }
 
 [Serializable]
+public class SceneLevelMapping {
+    public int levelId;
+    public string nextScene;
+}
+
+[Serializable]
 public class SceneMusicMapping
 {
 
@@ -29,6 +35,7 @@ public class GameManager : MonoBehaviour
     private static GameManager _instance;
 
     [SerializeField] private SceneMusicMapping[] sceneMusicMappings;
+    [SerializeField] private SceneLevelMapping[] sceneLevelMappings;
     [SerializeField] private SceneDialoguesMapping[] sceneDialogueMappings;
     public string menuScene;
 
@@ -82,6 +89,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void pauseAudio()
+    {
+        audioSource.Pause();
+    }
+
+    public void unpauseAudio()
+    {
+        audioSource.UnPause();
+    }
+
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -129,6 +146,21 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         //Debug.Log(audioAmplitude);
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log($"Space pressed. Is level won? {LevelManager.Instance.hasWon}");
+            if (LevelManager.Instance != null && LevelManager.Instance.hasWon)
+            {
+                string nextScene = GetNextSceneForLevel(LevelManager.Instance.currentLevel);
+                Debug.Log("Should go to success scene" + nextScene);
+
+                if (nextScene != null)
+                {
+                    TransitionToScene(nextScene);
+                }
+            }
+
+        }
     }
 
     private AudioResource GetMusicForScene(string sceneName)
@@ -136,6 +168,20 @@ public class GameManager : MonoBehaviour
         var mapping = sceneMusicMappings.FirstOrDefault(m => m.sceneName == sceneName);
 
         return mapping?.audioResource;
+    }
+
+    private string GetNextSceneForLevel(int level)
+    {
+        var mapping = sceneLevelMappings.FirstOrDefault(m => m.levelId == level);
+
+        return mapping?.nextScene;
+    }
+
+    private int GetLevelIdFromName(string levelScene)
+    {
+        // Extract digits using LINQ and convert to string, then parse to int
+        string numberString = new string(levelScene.Where(char.IsDigit).ToArray());
+        return int.TryParse(numberString, out int result) ? result : -1; // Return parsed integer or 0 if parsing fails
     }
 
     private void UpdateSceneMusic(string newScenePath)
@@ -208,11 +254,18 @@ public class GameManager : MonoBehaviour
 
         if (dialogueScene != null) {
             // auto start dialogue
+            Dialogue.Instance.gameObject.SetActive(true);
             Dialogue.Instance.StartDialogue(dialogueScene.dialogueLines);
             Dialogue.Instance.SetNextScene(dialogueScene.nextScene);
         } else {
-            Debug.Log("Could be level scene");
-
+            int levelId = GetLevelIdFromName(sceneName);
+            
+            if (levelId > -1)
+            {
+                Debug.Log($"Could be level scene {levelId}");
+                LevelManager.Instance.setLevel(levelId);
+                StartLevel();
+            }
         }
     }
 
