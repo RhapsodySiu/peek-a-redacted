@@ -77,15 +77,20 @@ public class GameManager : MonoBehaviour
     public float audioAmplitude {
         get
         {
-            audioSource.GetSpectrumData(audioSamples, 0, FFTWindow.Blackman);
-            
-            float amplitude = 0f;
-            for (int i = 0; i < audioSamples.Length; i++)
-            {
-                amplitude += audioSamples[i];
+            try {
+                audioSource.GetSpectrumData(audioSamples, 0, FFTWindow.Blackman);
+                
+                float amplitude = 0f;
+                for (int i = 0; i < audioSamples.Length; i++)
+                {
+                    amplitude += audioSamples[i];
+                }
+                return amplitude;
             }
-
-            return amplitude;
+            catch (Exception e) {
+                Debug.LogWarning($"Failed to get audio spectrum data: {e.Message}");
+                return -1f;
+            }
         }
     }
 
@@ -118,7 +123,7 @@ public class GameManager : MonoBehaviour
             _instance = null;
         }
 
-        Debug.Log("GameMsanager is destroyed");
+        Debug.Log("GameManager is destroyed");
     }
 
 
@@ -149,6 +154,12 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log($"Space pressed. Is level won? {LevelManager.Instance.hasWon}");
+            if (Dialogue.Instance != null && Dialogue.Instance.IsInProgress())
+            {
+                // Let DialogueManager handles
+                return;
+            }
+
             if (LevelManager.Instance != null && LevelManager.Instance.hasWon)
             {
                 string nextScene = GetNextSceneForLevel(LevelManager.Instance.currentLevel);
@@ -244,6 +255,8 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
+        Debug.Log($"GameManager: scene {sceneName} loaded");
+
         yield return StartCoroutine(FadeInGraphic(1f));
 
         if (nextAudioResource != null && !isSameMusic) {
@@ -262,7 +275,6 @@ public class GameManager : MonoBehaviour
             
             if (levelId > -1)
             {
-                Debug.Log($"Could be level scene {levelId}");
                 LevelManager.Instance.setLevel(levelId);
                 StartLevel();
             }

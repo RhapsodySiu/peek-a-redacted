@@ -18,23 +18,23 @@ public class LevelManager : MonoBehaviour
     private List<Enemy> _enemies;
     private Transform _targets;
 
-    public int currentLevel { get; private set; }
+    public int currentLevel;
 
     public bool hasWon;
     public bool hasLost;
 
     public bool debugLevel;
+    public bool debugAddEnemy;
 
     public int score { get; private set; }
 
     public int remainingLives;
+    public int targetsFound;
 
     [SerializeField] private GameObject enemyPrefab;
 
     private AudioSource _audioSource;
     [SerializeField] private AudioResource scoreFx;
-    [SerializeField] private AudioResource gameOverFx;
-    [SerializeField] private AudioResource winFx;
     [SerializeField] private AudioResource hurtFx;
 
     private void Awake()
@@ -47,10 +47,14 @@ public class LevelManager : MonoBehaviour
         else
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
 
         hasWon = false;
-        currentLevel = 0;
+        hasLost = false;
+
+        if (!debugLevel)
+            currentLevel = 0;
     }
 
     private void OnDestroy()
@@ -62,13 +66,13 @@ public class LevelManager : MonoBehaviour
     }
 
     // Fix strange collision detection issue
-    private void HackFix()
+    private void hackFix()
     {
         _player.transform.localScale = new Vector3(0.8f, 0.8f, 0f);
 
         foreach (Enemy enemy in _enemies)
         {
-            enemy.transform.localScale = new Vector3(0.8f, 0.8f, 0f);
+            enemy.transform.localScale = new Vector3(0.72f, 0.72f, 0f);
         }
     }
 
@@ -83,11 +87,21 @@ public class LevelManager : MonoBehaviour
             Debug.LogError("Enemy prefab not set in level manager");
     }
 
+    void Update()
+    {
+        if (debugAddEnemy)
+        {
+            debugAddEnemy = false;
+            spawnNewEnemy();
+        }
+    }
+
     void ResetState()
     {
         // Update player tile map reference to mist
         Tilemap[] tilemaps = FindObjectsByType<Tilemap>(FindObjectsSortMode.None);
 
+        // Debug.Log($"TileMap count {tilemaps.Length}");
         Time.timeScale = 1;
 
         if (_player != null)
@@ -105,7 +119,11 @@ public class LevelManager : MonoBehaviour
                 {
                     _player.targetTilemap = tilemap;
                 }
+            }
 
+            if (_player.mistTilemap == null)
+            {
+                Debug.LogError("cannot find mist tilemap in player");
             }
         }
         foreach (Enemy enemy in _enemies)
@@ -123,21 +141,30 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         _audioSource = GetComponent<AudioSource>();
+        Debug.Log($"Debug LevelManager: should start new game? {debugLevel}");
         if (debugLevel)
         {
-            Debug.Log("Debug LevelManager: new game");
             NewGame();
         }
     }
 
     public void NewGame()
     {
+        Debug.Log("LevelManager: new game");
+        hasLost = false;
+        hasWon = false;
+        targetsFound = 0;
+        SetLives(MAX_LIVES);
+
         // Get dependencies
         Grid grid = FindFirstObjectByType<Grid>();
         LevelUI levelUI = FindFirstObjectByType<LevelUI>();
 
         _enemies = new List<Enemy>(FindObjectsByType<Enemy>(FindObjectsSortMode.None));
         _player = FindFirstObjectByType<Player>();
+
+        if (_player == null)
+            Debug.LogError("LevelManager cannot find player");
 
         if (grid)
         {
@@ -160,6 +187,7 @@ public class LevelManager : MonoBehaviour
         {
             _currentLevelUI = levelUI;
             _currentLevelUI.fillHearts(MAX_LIVES);
+            _currentLevelUI.UpdateItemText(targetsFound, _targets.childCount);
         }
         else
         {
@@ -168,11 +196,12 @@ public class LevelManager : MonoBehaviour
 
         ResetState();
 
-        HackFix();
+        hackFix();
     }
 
     void WinGame()
     {
+        Debug.Log("WinGame");
         hasWon = true;
         // TODO: Play successful animation and move to next scene
         GameManager.Instance.pauseAudio();
@@ -233,13 +262,20 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public void TrySpawnNewEnemy()
+    public void HandleSweep(float cooldownTime)
     {
+        _currentLevelUI?.ResetCooldown(cooldownTime);
+
         if (Random.value < 0.9f)
         {
             return;
         }
         
+        spawnNewEnemy();
+    }
+
+    private void spawnNewEnemy()
+    {
         if (enemyPrefab == null) {
             Debug.LogError("Could not find Enemy prefab in Resources folder");
             return;
@@ -268,14 +304,8 @@ public class LevelManager : MonoBehaviour
 
             _enemies.Add(enemy);
         
-            HackFix();
+            hackFix();
         }
-    }
-
-    // Trigger when user presses restart button after game over
-    void RestartGame()
-    {
-        hasWon = false;
     }
 
     private void SetScore(int newScore)
@@ -298,7 +328,9 @@ public class LevelManager : MonoBehaviour
         }
 
         target.gameObject.SetActive(false);
-
+        targetsFound++;
+        _currentLevelUI?.UpdateItemText(targetsFound, _targets.childCount);
+        
         SetScore(score + target.points);
 
         if (!HasRemainingTargets())

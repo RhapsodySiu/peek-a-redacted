@@ -12,15 +12,17 @@ public class EnemyScatter : EnemyBehavior
 
     private void OnEnable()
     {
-        Debug.Log("enable scatter");
+        // Debug.Log("enable scatter");
     }
 
     private void Update()
     {
         if (pendingDirection.HasValue && enemy.movement.IsAtTileCenter())
         {
-            enemy.movement.SetDirection(pendingDirection.Value, waitForCenter: false);
+            enemy.movement.SetDirection(pendingDirection.Value, waitForCenter: true);
             pendingDirection = null;
+
+            Debug.Log("clear pending direction");
         }
     }
 
@@ -28,9 +30,13 @@ public class EnemyScatter : EnemyBehavior
     {
         FollowNode node = other.GetComponent<FollowNode>();
 
+        Debug.Log($"Hit {LayerMask.LayerToName(other.gameObject.layer)} enabled {enabled}");
+
         if (node != null && enabled)
         {
             int index = Random.Range(0, node.availableDirections.Count);
+
+            Debug.Log($"idx {index}");
 
             if (node.availableDirections.Count > 1 && node.availableDirections[index] == -enemy.movement.direction)
             {
@@ -41,7 +47,9 @@ public class EnemyScatter : EnemyBehavior
                 }
             }
 
+            Debug.Log($"final {index}");
             pendingDirection = node.availableDirections[index];
+            Debug.Log($"Hit trigger node direction {pendingDirection}");
         }
     }
 }

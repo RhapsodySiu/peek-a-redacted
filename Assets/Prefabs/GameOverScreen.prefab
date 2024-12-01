@@ -46,7 +46,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 8e39dc54f25ca7c4391d38d15cb18b9f, type: 3}
+  m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 8e39dc54f25ca7c4391d38d15cb18b9f, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -467,7 +467,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: TRY AGAIN
+  m_text: Game Over
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1c028b2649f593c42804c53a4e52e658, type: 2}
   m_sharedMaterial: {fileID: 432560747210288218, guid: 1c028b2649f593c42804c53a4e52e658, type: 2}

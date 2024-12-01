@@ -447,70 +447,174 @@ MonoBehaviour:
     audioResource: {fileID: 8300000, guid: 73d26d0cdc3775448aaae9ff8099afd8, type: 3}
   - sceneName: Scenes/Level1
     audioResource: {fileID: 8300000, guid: 3bff32d298c0d4e4890fbbd75639da97, type: 3}
+  - sceneName: Scenes/Dialogue2
+    audioResource: {fileID: 8300000, guid: b8faf6b6ccc738443b62bb3e78ad3149, type: 3}
   - sceneName: Scenes/Credit
     audioResource: {fileID: 8300000, guid: b8faf6b6ccc738443b62bb3e78ad3149, type: 3}
   sceneLevelMappings:
   - levelId: 0
     nextScene: Scenes/Dialogue1
   - levelId: 1
-    nextScene: Scenes/Credit
+    nextScene: Scenes/Dialogue2
   sceneDialogueMappings:
   - sceneName: Scenes/Dialogue0
     dialogueLines:
-    - line: Hallo wie lauft du?
+    - line: ' Welcome J, my human friend. \n Do you have a good time in the house
+        tour?'
       characterName: Nakako
       characterImage: {fileID: 21300000, guid: 20fe5fe6141d12e41a380d6885cc9f80, type: 3}
       useCenterPortrait: 1
       isSmile: 0
-    - line: Aber ich habe keine Erfahrung
+    - line: Nakako! It feels sinister, devious and gloomy! Makes me want to brew
+        a grand mischief.
       characterName: 
-      characterImage: {fileID: 21300000, guid: 2112ef5055e0a0843a0e9d3fa8965964, type: 3}
+      characterImage: {fileID: 21300000, guid: 20fe5fe6141d12e41a380d6885cc9f80, type: 3}
       useCenterPortrait: 1
       isSmile: 0
-    - line: Es gibt Schmutterling im Magen
+    - line: Excellent spirit. I require you to inflitrate the estate of the esteemed
+        Count Bellona. Their diary, I need you to retrieve it for me.
       characterName: Nakako
       characterImage: {fileID: 21300000, guid: 0b5991baeef7ac24dba13947fd071fb7, type: 3}
       useCenterPortrait: 1
       isSmile: 0
-    - line: Vielleicht soll ich nachzudenken
+    - line: 'Huh? No problem! Easy-peasy job, exchanging diary but one-sided, right? '
+      characterName: 
+      characterImage: {fileID: 21300000, guid: 0b5991baeef7ac24dba13947fd071fb7, type: 3}
+      useCenterPortrait: 1
+      isSmile: 1
+    - line: Oh you know, old vampires love to leave evidence in paper and hide the
+        pieces like easter eggs. Now happens to be a good time to sneak in.
+      characterName: Nakako
+      characterImage: {fileID: 21300000, guid: 2112ef5055e0a0843a0e9d3fa8965964, type: 3}
+      useCenterPortrait: 1
+      isSmile: 0
+    - line: Gotcha! Don't you worry. Time to use my suave searching skill and waltz
+        in there!
+      characterName: 
+      characterImage: {fileID: 21300000, guid: 20fe5fe6141d12e41a380d6885cc9f80, type: 3}
+      useCenterPortrait: 1
+      isSmile: 0
+    - line: Sure, best for you to act subtle, to avoid those wandering undead lowlife.
+        Nonetheless, I believe the creative mind you manuver all these times that
+        sorts things out.
+      characterName: Nakako
+      characterImage: {fileID: 21300000, guid: 0b5991baeef7ac24dba13947fd071fb7, type: 3}
+      useCenterPortrait: 1
+      isSmile: 0
+    - line: Hmm. You got it Nakako. Be as quiet as a pile of dust.
+      characterName: 
+      characterImage: {fileID: 21300000, guid: 0b5991baeef7ac24dba13947fd071fb7, type: 3}
+      useCenterPortrait: 1
+      isSmile: 0
+    - line: My, my such confidence. I admire that in a servant. Now off you go. J,
+        time is of the essence.
+      characterName: Nakako
+      characterImage: {fileID: 21300000, guid: 6d8d4d97015490442a653c5913ce50fb, type: 3}
+      useCenterPortrait: 1
+      isSmile: 0
+    - line: Aye aye boss! Off to the Mystic Falls!
       characterName: 
       characterImage: {fileID: 21300000, guid: 6d8d4d97015490442a653c5913ce50fb, type: 3}
       useCenterPortrait: 1
       isSmile: 1
-    - line: Was ist passiert?
+    - line: He'll do nicely. I hope..
       characterName: Nakako
-      characterImage: {fileID: 21300000, guid: 20fe5fe6141d12e41a380d6885cc9f80, type: 3}
+      characterImage: {fileID: 21300000, guid: 2112ef5055e0a0843a0e9d3fa8965964, type: 3}
       useCenterPortrait: 1
       isSmile: 0
     nextScene: Scenes/Level0
   - sceneName: Scenes/Dialogue1
     dialogueLines:
-    - line: Hallo wie lauft du?
-      characterName: Shadow of Bellona
-      characterImage: {fileID: 21300000, guid: 10980f8e388ad584ab1f8b469df30333, type: 3}
-      useCenterPortrait: 0
-      isSmile: 0
-    - line: Aber ich habe keine Erfahrung
+    - line: Hmm.. Only few more pieces left, as simple as a Katsudon!
       characterName: 
-      characterImage: {fileID: 21300000, guid: 10980f8e388ad584ab1f8b469df30333, type: 3}
+      characterImage: {fileID: 0}
+      useCenterPortrait: 0
+      isSmile: 1
+    - line: Well, well, what do we have here? A little lost lamb has wandered into
+        my domain. How delightful.
+      characterName: ???
+      characterImage: {fileID: 21300000, guid: eac15c30fd1e1f443b53d8c8c2f3cd21, type: 3}
       useCenterPortrait: 0
       isSmile: 0
-    - line: Es gibt Schmutterling im Magen
+    - line: Oh hi! Fancy meeting a chatting soul here.
+      characterName: 
+      characterImage: {fileID: 21300000, guid: eac15c30fd1e1f443b53d8c8c2f3cd21, type: 3}
+      useCenterPortrait: 0
+      isSmile: 1
+    - line: 'Dear, you don''t even know I watch everything here, not just merely
+        A CHATTING SOUL. '
       characterName: Shadow of Bellona
       characterImage: {fileID: 21300000, guid: eac15c30fd1e1f443b53d8c8c2f3cd21, type: 3}
       useCenterPortrait: 0
       isSmile: 0
-    - line: Vielleicht soll ich nachzudenken
+    - line: I do hope you're not scrapping around where you don't belong, little
+        mouse.
+      characterName: Shadow of Bellona
+      characterImage: {fileID: 21300000, guid: 10980f8e388ad584ab1f8b469df30333, type: 3}
+      useCenterPortrait: 0
+      isSmile: 0
+    - line: No no not! There're no lively things to do here. If you would be so kind
+        to tell me the exit?
       characterName: 
       characterImage: {fileID: 21300000, guid: 10980f8e388ad584ab1f8b469df30333, type: 3}
       useCenterPortrait: 0
-      isSmile: 1
-    - line: Was ist passiert?
+      isSmile: 0
+    - line: HeHe... I'm gonna tearing your apart, squeezing out the one behind this
+        from your pathetic brain juice~
       characterName: Shadow of Bellona
       characterImage: {fileID: 21300000, guid: 4156117b98a85174fb9ebfe5fe398a49, type: 3}
       useCenterPortrait: 0
       isSmile: 0
+    - line: Gotta move faster!
+      characterName: 
+      characterImage: {fileID: 21300000, guid: 4156117b98a85174fb9ebfe5fe398a49, type: 3}
+      useCenterPortrait: 0
+      isSmile: 1
     nextScene: Scenes/Level1
+  - sceneName: Scenes/Dialogue2
+    dialogueLines:
+    - line: Nakako, I'M BACK! It was really close and exciting!
+      characterName: 
+      characterImage: {fileID: 21300000, guid: 20fe5fe6141d12e41a380d6885cc9f80, type: 3}
+      useCenterPortrait: 1
+      isSmile: 1
+    - line: Welcome back. It seems you have faced the doppelganger of Bellona. Brilliant.
+        Where is the diary?
+      characterName: Nakako
+      characterImage: {fileID: 21300000, guid: 0b5991baeef7ac24dba13947fd071fb7, type: 3}
+      useCenterPortrait: 1
+      isSmile: 0
+    - line: There you go! I peeked a bit but I couldn't comprehend it.
+      characterName: 
+      characterImage: {fileID: 21300000, guid: 0b5991baeef7ac24dba13947fd071fb7, type: 3}
+      useCenterPortrait: 1
+      isSmile: 1
+    - line: Hmm... Interesting.
+      characterName: Nakako
+      characterImage: {fileID: 21300000, guid: 20fe5fe6141d12e41a380d6885cc9f80, type: 3}
+      useCenterPortrait: 1
+      isSmile: 0
+    - line: Tell me tell me! What do you see?
+      characterName: 
+      characterImage: {fileID: 21300000, guid: 2112ef5055e0a0843a0e9d3fa8965964, type: 3}
+      useCenterPortrait: 1
+      isSmile: 0
+    - line: Well...
+      characterName: Nakako
+      characterImage: {fileID: 21300000, guid: 2112ef5055e0a0843a0e9d3fa8965964, type: 3}
+      useCenterPortrait: 1
+      isSmile: 0
+    - line: It's a secret.
+      characterName: Nakako
+      characterImage: {fileID: 21300000, guid: 6d8d4d97015490442a653c5913ce50fb, type: 3}
+      useCenterPortrait: 1
+      isSmile: 0
+    - line: Yes! another SECRET!
+      characterName: 
+      characterImage: {fileID: 21300000, guid: 6d8d4d97015490442a653c5913ce50fb, type: 3}
+      useCenterPortrait: 1
+      isSmile: 1
+    nextScene: Scenes/Credit
   menuScene: Scenes/Menu
 --- !u!1 &6955266330075544343
 GameObject:
@@ -733,7 +837,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7043637880057301412}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 

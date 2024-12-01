@@ -38,7 +38,7 @@ public class FollowNode : MonoBehaviour
         }
         else
         {
-            Debug.Log($"Node direction {direction} not available, hit {hit.collider.gameObject.name}");
+            // Debug.Log($"Node direction {direction} not available, hit {hit.collider.gameObject.name}");
         }
     }
 

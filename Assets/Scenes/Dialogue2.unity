@@ -353,10 +353,6 @@ PrefabInstance:
       value: DialogueManager
       objectReference: {fileID: 0}
     - target: {fileID: 3112928664209593203, guid: a40b0460de531ac489c516594bf2add1, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3112928664209593203, guid: a40b0460de531ac489c516594bf2add1, type: 3}
       propertyPath: activeLines.Array.data[2].isSmile
       value: 1
       objectReference: {fileID: 0}

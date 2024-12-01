@@ -9,7 +9,6 @@ public abstract class EnemyBehavior : MonoBehaviour
     private void Awake()
     {
         enemy = GetComponent<Enemy>();
-        enabled = false;
     }
 
     public virtual void Enable()

@@ -6,21 +6,29 @@ using UnityEngine.UI;
 
 public class Dialogue : MonoBehaviour
 {
-    public static Dialogue Instance {
+    public static Dialogue Instance
+    {
         get
         {
             if (_instance == null)
             {
-                GameObject dPrefab = Resources.Load<GameObject>("DialogueManager");
+                // try to find existing instance
+                _instance = FindFirstObjectByType<Dialogue>();
 
-                if (dPrefab != null)
+                if (_instance == null)
                 {
-                    _instance = Instantiate(dPrefab).GetComponent<Dialogue>();
-                    _instance.name = "DialogueManager";
-                    DontDestroyOnLoad(_instance);
-                } else
-                {
-                    Debug.LogError("DialogueManager prefab not found in Resources!");
+                    GameObject dPrefab = Resources.Load<GameObject>("DialogueManager");
+
+                    if (dPrefab != null)
+                    {
+                        _instance = Instantiate(dPrefab).GetComponent<Dialogue>();
+                        _instance.name = "DialogueManager";
+                        DontDestroyOnLoad(_instance);
+                    }
+                    else
+                    {
+                        Debug.LogError("DialogueManager prefab not found in Resources!");
+                    }
                 }
             }
 
@@ -29,6 +37,7 @@ public class Dialogue : MonoBehaviour
     }
     private static Dialogue _instance;
 
+    [SerializeField] private AudioSource beep;
     [SerializeField] private Image backPortrait;
     [SerializeField] private Image centerPortrait;
     [SerializeField] private TextMeshProUGUI nameComponent;
@@ -44,7 +53,12 @@ public class Dialogue : MonoBehaviour
     private string nextScene;
 
     // Whether the dialogue mode is in progress
-    private bool inProgress = false;
+    private bool inProgress;
+
+    public bool IsInProgress()
+    {
+        return inProgress;
+    }
 
     private void Awake()
     {
@@ -54,12 +68,18 @@ public class Dialogue : MonoBehaviour
             DestroyImmediate(gameObject);
 
             return;
-             
+
         }
-        
-        Debug.Log("Create dialogue singleton");
+
+        Debug.Log("Create dialogue singleton and unset inprogress");
+        inProgress = false;
         _instance = this;
         DontDestroyOnLoad(gameObject);
+
+        if (!inProgress)
+        {
+            clearup();
+        }
     }
 
     public void SetNextScene(string sceneName)
@@ -67,16 +87,23 @@ public class Dialogue : MonoBehaviour
         nextScene = sceneName;
     }
 
+    private void clearup()
+    {
+        gameObject.SetActive(false);
+        centerPortrait.gameObject.SetActive(false);
+        backPortrait.gameObject.SetActive(false);
+        textComponent.text = string.Empty;
+        nameComponent.text = string.Empty;
+    }
+
     void Start()
     {
-        if (textComponent == null || nameComponent == null) {
+        if (textComponent == null || nameComponent == null)
+        {
             Debug.LogError("Text/Name component not assigned");
             return;
         }
 
-        inProgress = false;
-        backPortrait.gameObject.SetActive(false);
-        centerPortrait.gameObject.SetActive(false);
         textComponent.text = string.Empty;
         nameComponent.text = string.Empty;
         _defaultAvatarSprite = avatar.sprite;
@@ -84,7 +111,7 @@ public class Dialogue : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && inProgress)
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && inProgress)
         {
             if (textComponent.text == activeLines[index].line)
             {
@@ -101,7 +128,7 @@ public class Dialogue : MonoBehaviour
     public void StartDialogue(DialogueLine[] lines)
     {
         avatar?.gameObject.SetActive(false);
-        Debug.Log("StartDialogue");
+
         if (lines.Length > 0)
         {
             activeLines = lines;
@@ -113,6 +140,7 @@ public class Dialogue : MonoBehaviour
 
             inProgress = true;
 
+            Debug.Log($"StartDialogue: inProgress {inProgress}");
             StartCoroutine(TypeLine());
         }
     }
@@ -124,7 +152,7 @@ public class Dialogue : MonoBehaviour
         nameComponent.text = currentLine.characterName == null ? string.Empty : currentLine.characterName;
         if (currentLine.characterImage != null)
         {
-            if (currentLine.useCenterPortrait) 
+            if (currentLine.useCenterPortrait)
             {
                 backPortrait.gameObject.SetActive(false);
                 centerPortrait.gameObject.SetActive(true);
@@ -152,6 +180,11 @@ public class Dialogue : MonoBehaviour
 
         foreach (char c in currentLine.line.ToCharArray())
         {
+            if (c != ' ' && c != '/')
+            {
+                beep.Play();
+            }
+
             textComponent.text += c;
             yield return new WaitForSeconds(textSpeed);
         }
@@ -168,8 +201,7 @@ public class Dialogue : MonoBehaviour
         }
         else
         {
-            gameObject.SetActive(false);
-            centerPortrait.gameObject.SetActive(false);
+            clearup();
 
             EndDialogue();
         }
@@ -177,6 +209,8 @@ public class Dialogue : MonoBehaviour
 
     public void EndDialogue()
     {
+        Debug.Log("Dialogue: end unset inProgress");
+
         inProgress = false;
         if (nextScene != null)
         {

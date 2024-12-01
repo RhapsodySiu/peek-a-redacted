@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     private Collider2D _collider;
 
     public float clearMistCooldownTime = 1.5f;
-    private bool canClearMist = true;
+    public bool canClearMist = true;
 
     private void Awake()
     {
@@ -83,6 +83,7 @@ public class Player : MonoBehaviour
         
         movement.ResetState();
         gameObject.SetActive(true);
+        canClearMist = true;
     }
 
     public void Die()
@@ -94,6 +95,7 @@ public class Player : MonoBehaviour
     }
 
     void SweepTargets() {
+        Debug.Log("Sweep target");
         if (mistTilemap == null || targetTilemap == null) return;
 
         Vector3Int playerCell = mistTilemap.WorldToCell(transform.position);
@@ -123,7 +125,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        LevelManager.Instance.TrySpawnNewEnemy();
+        LevelManager.Instance.HandleSweep(clearMistCooldownTime);
 
         sweepAudioSource?.Play();
 

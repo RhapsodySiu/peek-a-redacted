@@ -1,4 +1,3 @@
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Tilemaps;
@@ -20,12 +19,7 @@ public class Movement : MonoBehaviour
     private Grid grid;
 
     public bool isPlayer = false;
-
-    // private Vector2 lastPosition;
-    // private float stuckThreshold = 0.01f;
-    // private float stuckTime = 0f;
-    // private float stuckTimeThreshold = 5f;
-
+    
     private void Awake()
     {
         Body = GetComponent<Rigidbody2D>();
@@ -61,28 +55,6 @@ public class Movement : MonoBehaviour
         Vector2 newPosition = Body.position + direction * speed * speedMultiplier * Time.fixedDeltaTime;
         
         Body.MovePosition(newPosition);
-
-        // float movedDistance = Vector2.Distance(Body.position, lastPosition);
-        // if (movedDistance < stuckThreshold)
-        // {
-        //     stuckTime += Time.fixedDeltaTime;
-
-        //     if (stuckTime >= stuckTimeThreshold)
-        //     {
-        //         Debug.Log("Stuck");
-        //         // Move to the nearest tile center when stuck
-        //         Vector3Int currentCell = grid.WorldToCell(transform.position);
-        //         Vector3 centerPosition = grid.GetCellCenterWorld(currentCell);
-        //         Body.MovePosition(centerPosition);
-        //         stuckTime = 0f;
-        //     }
-        // }
-        // else
-        // {
-        //     stuckTime = 0f;
-        // }
-        
-        // lastPosition = Body.position;
     }
 
     public void SetDirection(Vector2 dir, bool forced = false, bool waitForCenter = true)
@@ -91,20 +63,19 @@ public class Movement : MonoBehaviour
         
         if (shouldCheckCenter && !IsAtTileCenter())
         {
-            Debug.Log("!!! no setting");
             nextDirection = dir;
             return;
         }
 
         if (forced || !Occupied(dir))
         {
+            Debug.Log($"Enemy change direction to {dir}");
             direction = dir;
             nextDirection = Vector2.zero;
             // stuckTime = 0f;
         }
         else
         {
-            Debug.Log("!!! occupied");
             nextDirection = dir;
         }
     }
@@ -112,7 +83,7 @@ public class Movement : MonoBehaviour
     public bool Occupied(Vector2 direction)
     {
         Vector2 origin = transform.position;
-        Vector2 size = Vector2.one * 0.7f;
+        Vector2 size = isPlayer ? Vector2.one * 0.7f : Vector2.one * 0.6f;
         float distance = isPlayer ? 1.0f : 1.1f;
 
         RaycastHit2D hit = Physics2D.BoxCast(origin, size, 0f, direction, distance, obstacleLayer);
@@ -122,6 +93,10 @@ public class Movement : MonoBehaviour
 
     public bool IsAtTileCenter()
     {
+        if (grid == null)
+        {
+            Debug.Log("IsAtTileCenter: Not grid reference");
+        }
         if (grid == null) return false;
         
         // Convert world position to cell position

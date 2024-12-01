@@ -6,7 +6,9 @@ using UnityEngine.UI;
 public class LevelUI : MonoBehaviour
 {
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI targetText;
     public RectTransform healthContainer;
+    public Image sweepCoolDownIndicator;
 
     public Image flashImage;
     public float flashDuration = 0.5f;
@@ -21,6 +23,16 @@ public class LevelUI : MonoBehaviour
         if (scoreText == null)
         {
             Debug.LogError("scoreText is not set in LevelUI");
+        }
+
+        if (sweepCoolDownIndicator == null)
+        {
+            Debug.LogError("sweepCoolDownIndicator is not set in LevelUI");
+        }
+
+        if (targetText == null)
+        {
+            Debug.LogError("targetText is not set in LevelUI");
         }
 
         if (healthContainer == null)
@@ -60,6 +72,30 @@ public class LevelUI : MonoBehaviour
             Transform lastHeart = healthContainer.GetChild(healthContainer.childCount - 1);
             Destroy(lastHeart.gameObject);
         }
+    }
+
+    public void UpdateItemText(int found, int total)
+    {
+        targetText.text = $"Items found: {found}/{total}";
+    }
+
+    public void ResetCooldown(float duration)
+    {
+        sweepCoolDownIndicator.fillAmount = 0;
+
+        StartCoroutine(ResetCoolDownCoroutine(duration));
+    }
+
+    IEnumerator ResetCoolDownCoroutine(float duration)
+    {
+        float elapsedTime = 0;
+        while (elapsedTime < duration)
+        {
+            sweepCoolDownIndicator.fillAmount = (float)elapsedTime / duration;
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        sweepCoolDownIndicator.fillAmount = 1;
     }
 
     private void showScreen(GameObject screen)

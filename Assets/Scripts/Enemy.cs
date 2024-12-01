@@ -9,26 +9,33 @@ public class Enemy : MonoBehaviour {
     public Movement movement { get; private set; }
     public EnemyHome home { get; private set; }
     public EnemyScatter scatter { get; private set; }
-    // public EnemyChase chase { get; private set; }
 
     public bool isSpawned = false;
 
     private Transform _target;
-
-    private EnemyBehavior initialBehavior;
+    private BoxCollider2D _collider;
 
     public bool debug;
 
     private void Awake()
     {
         movement = GetComponent<Movement>();
-        home = GetComponent<EnemyHome>();
         scatter = GetComponent<EnemyScatter>();
-        // chase = GetComponent<EnemyChase>();
 
-        initialBehavior = scatter;
+        _collider = GetComponent<BoxCollider2D>();
     }
     
+    private void OnDrawGizmos()
+    {
+        if (_collider != null)
+        {
+            // Draw the box collider area
+            Gizmos.color = Color.magenta;
+            Vector2 center = _collider.bounds.center;
+            Vector2 size = _collider.bounds.size;
+            Gizmos.DrawWireCube(center, size);
+        }
+    }
 
     public Transform GetTargetTransform()
     {
@@ -44,18 +51,6 @@ public class Enemy : MonoBehaviour {
     {
         gameObject.SetActive(true);
         movement.ResetState();
-
-        // chase.Disable();
-
-        if (home != initialBehavior)
-        {
-            home.Disable();
-        }
-
-        if (initialBehavior != null)
-        {
-            initialBehavior.Enable();
-        }
     }
 
     void OnValidate()

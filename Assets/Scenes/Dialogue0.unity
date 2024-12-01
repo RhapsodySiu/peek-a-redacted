@@ -443,6 +443,10 @@ PrefabInstance:
       propertyPath: activeLines.Array.data[2].isSmile
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6580548021431433097, guid: a40b0460de531ac489c516594bf2add1, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7090380780666080745, guid: a40b0460de531ac489c516594bf2add1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1691.8024
